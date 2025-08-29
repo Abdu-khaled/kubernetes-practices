@@ -213,3 +213,41 @@ kubectl get pods  # To verifiy the number of pods
 ![](./screenshot/10.png)
 
 ----
+
+### 11. Find out the issue in the below Yaml.
+
+```bash
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: replicaset-2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+```
+**Explanation of Issue:**
+  - In ReplicaSet, the selctor matchLabels must match the label under template metadata.labels
+   
+    `Selector`:
+    ```bash
+    matchLabels:
+      tier: frontend
+    ```
+
+    `Pod template labels`:
+    ```bash
+    labels:
+      tier: nginx
+    ```
+
+
