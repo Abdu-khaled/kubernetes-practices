@@ -152,4 +152,21 @@ kubectl get pods
 **Verification Command:**  
 ![](./screenshot/07.png)
 
+---
+
+### 8. Scale the replicas to 5 without edit in the Yaml file.
+
+**Explanation:**
+  - we can scale up or down the nunber of replica by using `kubectl scale` .
+
+**Command:**
+```bash
+kubectl scale replicaset --replicas=5 frontend
+kubectl describe replicaset frontend | grep -i replica  # grep for number of replica
+```
+
+**Verification Command:**  
+![](./screenshot/08.png)
+
+---
 
