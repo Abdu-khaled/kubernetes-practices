@@ -8,8 +8,8 @@
  - To create pod nginx without yaml file we use imperative way by use `kubectl run`. 
 **Command:**
 ```bash
- kubectl run my-nginx --image nginx
- kubectl get pods
+kubectl run my-nginx --image nginx
+kubectl get pods
 ```
  - my-nginx: the pod name 
  - --image=nginx : tells Kubernetes to use the official nginx image
@@ -25,8 +25,8 @@
  - To create pod nginx without yaml file we use imperative way by use `kubectl run`. 
 **Command:**
 ```bash
- kubectl run my-nginx --image nginx123
- kubectl get pods
+kubectl run my-nginx --image nginx123
+kubectl get pods
 ```
 
 **Verification Command:**  
@@ -42,8 +42,8 @@
    
 **Command:**
 ```bash
- kubectl get pods
- kubectl describe pod my-nginx
+kubectl get pods
+kubectl describe pod my-nginx
 ```
 **Verification Command:**  
 ![](./screenshot/03.png)
@@ -59,8 +59,8 @@
 
 **Command:**
 ```bash
- kubectl get pod my-nginx -o wide
- kubectl describe pod my-nginx | grep -i image
+kubectl get pod my-nginx -o wide
+kubectl describe pod my-nginx | grep -i image
 ```
 **Verification Command:**  
 ![](./screenshot/04.png)
@@ -74,8 +74,41 @@
 
 **Command:**
 ```bash
- kubectl delete pod my-nginx
+kubectl delete pod my-nginx
 ```
 
 **Verification Command:**  
 ![](./screenshot/05.png)
+
+---
+
+### 6. create another one with yaml file and use label.
+
+**Explanation:**
+  - Now we will use Declarative way by apply the yaml file to create pod.
+
+**Command:**
+```bash
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-nginx
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+```
+
+**Command:**
+```bash
+kubectl apply -f pod-nginx.yaml
+```
+
+**Verification Command:**  
+![](./screenshot/06.png)
+
+---
