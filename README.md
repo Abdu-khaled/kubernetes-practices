@@ -31,3 +31,36 @@
 
 **Verification Command:**  
 ![](./screenshot/02.png)
+
+---
+
+### 3.  check the status and why it doesn't work.
+
+
+**Explanation:**
+ - The Pod is created but cannot run because the image nginx123 does not exist in Docker Hub (or your configured registry). Kubernetes will try to pull it, fail, and mark the Pod as ImagePullBackOff.
+   
+**Command:**
+```bash
+ kubectl get pods
+ kubectl describe pod my-nginx
+```
+**Verification Command:**  
+![](./screenshot/03.png)
+
+
+---
+
+### 4. I need to know node name - IP - Image Of the POD.
+
+**Explanation:**
+  - we can use `kubectl get pod -o wide` to see the node name and Pod IP.
+  - To check which image the pod using, we use `kubectl describe pod`.
+
+**Command:**
+```bash
+ kubectl get pod my-nginx -o wide
+ kubectl describe pod my-nginx | grep -i image
+```
+**Verification Command:**  
+![](./screenshot/04.png)
