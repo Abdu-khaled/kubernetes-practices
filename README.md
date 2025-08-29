@@ -251,3 +251,43 @@ spec:
     ```
 
 
+### 12. Find out the issue in the below Yaml.
+
+```bash
+apiVersion: apps/v1
+kind: deployment
+metadata:
+  name: deployment-1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: busybox-pod
+  template:
+    metadata:
+      labels:
+        name: busybox-pod
+    spec:
+      containers:
+      - name: busybox-container
+        image: busybox
+        command:
+        - sh
+        - "-c"
+        - echo Hello Kubernetes! && sleep 3600
+```
+
+**Explanation of Issue:**
+  - Issue → should be Deployment not deployment.
+   
+    `Selector`:
+    ```bash
+    kind: deployment
+    ```
+
+    `Pod template labels`:
+    ```bash
+    labels:
+      tier: nginx
+    ```
+
