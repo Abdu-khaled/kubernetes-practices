@@ -180,8 +180,8 @@ kubectl describe replicaset frontend | grep -i replica  # grep for number of rep
      - If we manually delete one Pod, ReplicaSet detects that the number of running Pods dropped below 5.
 
      - It will automatically create a new Pod to replace the deleted one.
-     - 
-This is how Kubernetes maintains high availability and self-healing.
+  
+ - This is how Kubernetes maintains high availability and self-healing.
 
 **Command:**
 ```bash
@@ -191,3 +191,25 @@ kubectl delete pod frontend-kjcmv  # Delete one of the pod
 
 **Verification Command:**  
 ![](./screenshot/09.png)
+
+
+---
+
+### 10. Scale down the pods aging to 2 without scale command use terminal.
+
+**Explanation:**
+  - We want to reduce the number of replicas from 5 to 2, but without kubectl scale.
+  - The alternative way is to edit the ReplicaSet manifest directly from the terminal using `kubectl edit`.
+
+
+**Command:**
+```bash
+kubectl edit replicaset frontend 
+kubectl get pods  # To verifiy the number of pods
+```
+
+**Verification Command:**
+![](./screenshot/11.png)
+![](./screenshot/10.png)
+
+----
