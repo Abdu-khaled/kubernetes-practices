@@ -2,7 +2,7 @@
 
 ## Part1:
 
-### 1. create pod nginx with name my nginx direct from command don't use yaml file.
+### 1. Create pod nginx with name my nginx direct from command don't use yaml file.
 
 **Explanation:**
  - To create pod nginx without yaml file we use imperative way by use `kubectl run`. 
@@ -19,7 +19,7 @@ kubectl get pods
 
 ---
 
-### 2. create pod nginx with name my nginx command and use Image nginx123  direct from command don't use yaml file.
+### 2. Create pod nginx with name my nginx command and use Image nginx123  direct from command don't use yaml file.
 
 **Explanation:**
  - To create pod nginx without yaml file we use imperative way by use `kubectl run`. 
@@ -34,7 +34,7 @@ kubectl get pods
 
 ---
 
-### 3.  check the status and why it doesn't work.
+### 3.  Check the status and why it doesn't work.
 
 
 **Explanation:**
@@ -82,7 +82,7 @@ kubectl delete pod my-nginx
 
 ---
 
-### 6. create another one with yaml file and use label.
+### 6. Create another one with yaml file and use label.
 
 **Explanation:**
   - Now we will use Declarative way by apply the yaml file to create pod.
@@ -112,3 +112,44 @@ kubectl apply -f pod-nginx.yaml
 ![](./screenshot/06.png)
 
 ---
+
+### 7. Create ReplicaSet with 3 replicas using nginx Image.
+
+**Explanation:**
+  - A ReplicaSet ensures a specific number of Pod replicas are always running. If a Pod fails or is deleted, the ReplicaSet creates a new one to maintain the count.
+
+
+**Command:**
+```bash
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+```
+
+**Command:**
+```bash
+kubectl apply -f ReplicaSet.yaml
+kubectl get replicasets
+kubectl get pods
+```
+
+**Verification Command:**  
+![](./screenshot/07.png)
+
+
