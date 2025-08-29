@@ -170,3 +170,24 @@ kubectl describe replicaset frontend | grep -i replica  # grep for number of rep
 
 ---
 
+### 9. Delete any one of the 5 pods and check what happen and explain.
+
+**Explanation:**
+  - ReplicaSet ensures that the desired number of replicas is always running.
+
+     - We scaled nginx-rs to 5 replicas.
+
+     - If we manually delete one Pod, ReplicaSet detects that the number of running Pods dropped below 5.
+
+     - It will automatically create a new Pod to replace the deleted one.
+     - 
+This is how Kubernetes maintains high availability and self-healing.
+
+**Command:**
+```bash
+kubectl get pods -l tier=frontend  # To verifiy the pods in replica have the same label
+kubectl delete pod frontend-kjcmv  # Delete one of the pod 
+```
+
+**Verification Command:**  
+![](./screenshot/09.png)
