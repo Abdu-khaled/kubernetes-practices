@@ -64,3 +64,18 @@
 ```
 **Verification Command:**  
 ![](./screenshot/04.png)
+
+---
+
+### 5.  Delete the pod. 
+
+**Explanation:**
+  - we can use `kubectl delete pod` for delete andy pod.
+
+**Command:**
+```bash
+ kubectl delete pod my-nginx
+```
+
+**Verification Command:**  
+![](./screenshot/05.png)
