@@ -331,3 +331,51 @@ spec:
     ```bash
     apiVersion: apps/v1
     ```
+--- 
+
+### 14. What's command you use to know what Image name that running the deployment .
+
+**Command:**
+```bash
+kubectl describe deployments < deployment-name > | grep -i image 
+```
+
+---
+
+### 15. Create deployment using following data :
+ - Name: httpd-frontend;
+ - Replicas: 3;
+ - Image: httpd:2.4-alpine
+
+**Declarative**: Create yaml file
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: http-container
+        image: httpd:2.4-alpine
+```
+
+**Command:**
+```bash
+kubectl apply -f deployment-http.yaml
+kubectl get deploy
+kubectl get pod 
+```
+
+**Verification Command:**
+![](./screenshot/12.png)
