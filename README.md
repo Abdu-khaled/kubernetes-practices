@@ -699,3 +699,81 @@ spec:
 
 ---
 
+### 25. List the Components of the **Master node** and what is the purpose of each component.
+
+ **1. kube-apiserver**
+- **Purpose:** Acts as the **front door** of the Kubernetes cluster.  
+- **Responsibilities:**  
+  - Exposes the Kubernetes REST API.  
+  - Validates and processes API requests.  
+  - Updates the etcd store with cluster state.  
+  - Serves as the communication hub between components.  
+
+---
+
+**2. etcd**
+- **Purpose:** A **distributed key-value store** that stores all cluster data.  
+- **Responsibilities:**  
+  - Persists configuration data, secrets, and cluster state.  
+  - Provides strong consistency guarantees.  
+  - Functions as the **database of Kubernetes**.  
+
+---
+**3. kube-scheduler**
+- **Purpose:** Determines **which node** a Pod should run on.  
+- **Responsibilities:**  
+  - Considers resource availability (CPU, memory).  
+  - Evaluates affinity/anti-affinity rules.  
+  - Checks taints/tolerations.  
+  - Assigns Pods, but does not run them itself.  
+
+
+---
+**4. kube-controller-manager**
+- **Purpose:** Runs background **controllers** that manage cluster state.  
+- **Key Controllers:**  
+  - **Node Controller:** Monitors node health.  
+  - **Replication Controller:** Ensures desired number of Pods are running.  
+  - **Endpoint Controller:** Updates Services and Pod endpoints.  
+  - **Service Account & Token Controllers:** Handle Pod authentication.  
+---
+**5. cloud-controller-manager (Cloud Environments Only)**
+- **Purpose:** Integrates Kubernetes with cloud providers (AWS, GCP, Azure, etc.).  
+- **Responsibilities:**  
+  - Manages cloud-specific features:  
+    - Node lifecycle.  
+    - Route management.  
+    - Load balancer provisioning.  
+    - Persistent volume integration.  
+
+### 26.  List  the Components of the **Worker node** and what is the purpose of each component.
+
+
+**1. kubelet**
+- **Purpose:** The **agent** that runs on each worker node.  
+- **Responsibilities:**  
+  - Registers the node with the Kubernetes cluster.  
+  - Ensures containers described in PodSpecs are running.  
+  - Monitors Pod health and reports back to the API server.  
+  - Manages Pod lifecycle (start, stop, restart).  
+
+---
+
+**2. kube-proxy**
+- **Purpose:** Maintains **networking rules** on worker nodes.  
+- **Responsibilities:**  
+  - Implements **Service networking** (ClusterIP, NodePort, LoadBalancer).  
+  - Routes traffic to the correct Pod across nodes.  
+  - Uses iptables or IPVS to handle load balancing.  
+
+---
+
+**3. Container Runtime**
+- **Purpose:** The software that actually **runs containers**.  
+- **Examples:** Docker, containerd, CRI-O.  
+- **Responsibilities:**  
+  - Pulls container images from registries.  
+  - Starts and stops containers.  
+  - Provides the container environment to run applications. 
+
+---
