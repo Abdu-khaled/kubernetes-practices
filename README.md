@@ -614,3 +614,26 @@ kubectl port-forward sevices/backend-service 8080:8080
 **Verification Command:**
 ![](./screenshot/23.png)
 
+---
+
+### 23. 23- Create a LoadBalancer Service:
+* Create a LoadBalancer service for your frontend.
+
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-lb
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP 
+     port: 80
+     targetPort: 80
+  type: LoadBalancer
+```
+
+
+
+* Explain what happens when you try to apply it in an environment that does not support load balancers (e.g., Minikube).
