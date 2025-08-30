@@ -379,3 +379,20 @@ kubectl get pod
 
 **Verification Command:**
 ![](./screenshot/12.png)
+
+**Imperative**
+```bash
+kubectl create deployment deployment-http --image httpd:2.4-alpine --replicas 3
+```
+
+---
+
+### 16. Replace the image to nginx777 with command directly.
+
+**Command**
+```bash
+kubectl create deployment deployment-http --image httpd:2.4-alpine --replicas 3
+```
+
+**Verification Command:**
+![](./screenshot/12.png)
