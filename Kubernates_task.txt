@@ -117,6 +117,9 @@ Image: httpd:2.4-alpine
 
 17- rollback to pervious version
 
+
+
+
 18- Create a Simple Web Application:
 * Use a Dockerfile to create a simple web application (e.g., an Nginx server serving an HTML page).
 * Build the Docker image and push it to DockerHub your private Account.

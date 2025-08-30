@@ -385,14 +385,232 @@ kubectl get pod
 kubectl create deployment deployment-http --image httpd:2.4-alpine --replicas 3
 ```
 
+
+
 ---
 
 ### 16. Replace the image to nginx777 with command directly.
 
 **Command**
 ```bash
-kubectl create deployment deployment-http --image httpd:2.4-alpine --replicas 3
+kubectl set image deployments httpd-frontend http-container=nginx777 
 ```
 
 **Verification Command:**
-![](./screenshot/12.png)
+![](./screenshot/13.png)
+
+
+
+---
+
+### 17. Rollback to pervious version.
+
+**Command**
+```bash
+kubectl rollout undo deployment httpd-frontend 
+```
+
+**Verification Command:**
+![](./screenshot/14.png)
+
+---
+
+### 18. Create a Simple Web Application:
+* Use a Dockerfile to create a simple web application (e.g., an Nginx server serving an HTML page).
+* Build the Docker image and push it to DockerHub your private Account.
+
+**Create simple html page**
+```bash
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My WebApp</title>
+</head>
+<body>
+  <h1>Hello from Abdelrahman’s Nginx WebApp !!</h1>
+</body>
+</html>
+```
+
+**Dockerfile**
+```bash
+FROM nginx:latest  
+
+# Copy custom HTML into Nginx web root
+COPY index.html /usr/share/nginx/html/
+
+# Expose port 80
+EXPOSE 80
+```
+
+**Build Image**
+```bash
+docker build -t my-nginx-webapp:1.0 . 
+```
+
+**Verification Command:**
+![](./screenshot/16.png)
+
+
+**Login Dockerhub**
+```bash
+docker login 
+```
+**Verification Command:**
+![](./screenshot/16.png)
+
+
+**Push Image in Dockerhub**
+```bash
+docker push abdelrahman404/my-nginx-webapp:1.0 
+```
+**Verification Command:**
+![](./screenshot/17.png)
+
+
+---
+
+### 19. 19- Create a Deployment Using This Image:
+* Deploy the Docker image from DockerHub to Kubernetes with a Deployment that has 3 replicas.
+
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-webapp
+  labels:
+    app: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: nginx-container
+        image: abdelrahman404/my-nginx-webapp:1.0
+```
+
+**Command**
+```bash
+kubectl apply -f frontend-deployment.yaml
+kubectl get pods 
+```
+
+**Verification Command:**
+![](./screenshot/18.png)
+
+
+---
+
+### 20. Expose the Frontend (FE) Using Service to make it accessible from your browser.
+
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-webapp-service
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
+```
+
+**Command**
+```bash
+kubectl apply -f service-FE.yaml
+kubectl get services
+```
+
+**Verification Command:**
+![](./screenshot/19.png)
+
+
+**Command**
+```bash
+kubectl describe nodes minikube | grep -i ip # to get node IP and access it in http://<NodeIP>:<NodePort>
+```
+
+
+**Verification Command:**
+![](./screenshot/20.png)
+
+
+---
+
+### 21. Create a Backend (BE) Deployment:
+* Create another Deployment for the backend using the following data:
+   - Image: python:3.8-slim
+   - Command: ["python", "-m", "http.server", "8080"] (include this command in the deployment file).
+  
+
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend-container
+        image: python:3.8-slim
+        command: ["python", "-m", "http.server", "8080"]
+        ports:
+        - containerPort: 8080
+```
+
+**Command**
+```bash
+kubectl apply -f backend-deployment.yaml
+kubectl get deploy
+```
+
+
+**Verification Command:**
+![](./screenshot/21.png)
+
+
+---
+
+### 22. Expose the Backend Internally Using Service:
+* Use kubectl command to make it accessible from your browser (without NodePort)
+
+
+**Command**
+```bash
+kubectl expose deployment backend-deployment \
+  --name=backend-service \
+  --port 8080 \
+  --target-port 8080 \
+  --type ClusterIP
+```
+
+**Verification Command:**
+![](./screenshot/22.png)
+
+
+**Command**
+```bash
+kubectl port-forward sevices/backend-service 8080:8080
+```
+**Verification Command:**
+![](./screenshot/23.png)
+
