@@ -280,14 +280,54 @@ spec:
 **Explanation of Issue:**
   - Issue → should be Deployment not deployment.
    
-    `Selector`:
+    `Kind`: Issuue
     ```bash
     kind: deployment
     ```
 
-    `Pod template labels`:
+    `Kind`: Correct
     ```bash
-    labels:
-      tier: nginx
+    kind: Deployment
     ```
 
+---
+
+
+### 13. Find out the issue in the below Yaml.
+
+```bash
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: deployment-1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: busybox-pod
+  template:
+    metadata:
+      labels:
+        name: busybox-pod
+    spec:
+      containers:
+      - name: busybox-container
+        image: busybox
+        command:
+        - sh
+        - "-c"
+        - echo Hello Kubernetes! && sleep 3600
+```
+
+**Explanation of Issue:**
+  - Issue → In apiVersion should be apps/v1 not v1
+   
+    `Issue`:
+    ```bash
+    apiVersion: v1
+    ```
+
+    `Pod template labels`:
+    ```bash
+    apiVersion: apps/v1
+    ```
