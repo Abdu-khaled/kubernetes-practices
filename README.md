@@ -616,7 +616,7 @@ kubectl port-forward sevices/backend-service 8080:8080
 
 ---
 
-### 23. 23- Create a LoadBalancer Service:
+### 23. Create a LoadBalancer Service:
 * Create a LoadBalancer service for your frontend.
 
 ```bash
@@ -634,6 +634,68 @@ spec:
   type: LoadBalancer
 ```
 
+**Verification Command:**
+![](./screenshot/24.png)
 
 
 * Explain what happens when you try to apply it in an environment that does not support load balancers (e.g., Minikube).
+
+- In Minikube or any local cluster (no cloud integration):
+
+  - Kubernetes cannot provision a cloud load balancer, because there’s no cloud API.
+
+  - The EXTERNAL-IP field in kubectl get svc will show <pending> forever.
+
+
+**Verification Command:**
+![](./screenshot/25.png)
+
+---
+
+### 24. Explain DaemonSet and Provide a YAML File:
+
+* Explain what a DaemonSet is and how it works.
+
+  **DaemonSet**
+    - A DaemonSet ensuers that a copy of Pod runs on all or some nodes in kubernets cluster
+    - It's often used for cluster-wide services that need to run everywhere, such as:
+      - Logging agents
+      - Monitoring agents
+      - Network components
+      - Shared storage  
+    
+  **How DaemonSet work**
+    - When you create a DaemonSet, kubernets schedules one Pod per node automatically
+    - If a new node added to the cluster a new Pod created on that node.
+    - If a node is removed also DaemonSet Pod removed
+    - We can restrict DaemonSet to specific nodes using node selectors, tolerations, or node affinity.
+    
+
+* Provide a YAML file to create a DaemonSet in Kubernetes.
+
+```bash
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-daemonset
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: nginx-daemon
+  template:
+    metadata:
+      labels:
+        app: nginx-daemon
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.25
+        ports:
+        - containerPort: 80
+```
+**Verification Command:**
+![](./screenshot/26.png)
+
+---
+
