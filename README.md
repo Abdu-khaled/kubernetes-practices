@@ -868,3 +868,16 @@ spec:
 
 *Data sharing can be between different local processes within a container, or between different containers, or between Pods.*
 
+Types of volumes:
+
+ - emptyDir → temporary storage, deleted when Pod stops.
+
+ - hostPath → uses node’s filesystem.
+
+ - persistentVolume (PV) + persistentVolumeClaim (PVC) → dynamic storage.
+
+---
+## Part3:
+
+### 1. Start your minikube with 2 nodes 
+
