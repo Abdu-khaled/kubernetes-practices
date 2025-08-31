@@ -701,50 +701,52 @@ spec:
 
 ### 25. List the Components of the **Master node** and what is the purpose of each component.
 
- **1. kube-apiserver**
-- **Purpose:** Acts as the **front door** of the Kubernetes cluster.  
-- **Responsibilities:**  
-  - Exposes the Kubernetes REST API.  
-  - Validates and processes API requests.  
-  - Updates the etcd store with cluster state.  
-  - Serves as the communication hub between components.  
+  **1. kube-apiserver**
+  - **Purpose:** Acts as the **front door** of the Kubernetes cluster.  
+  - **Responsibilities:**  
+    - Exposes the Kubernetes REST API.  
+    - Validates and processes API requests.  
+    - Updates the etcd store with cluster state.  
+    - Serves as the communication hub between components.  
+
+  ---
+
+  **2. etcd**
+  - **Purpose:** A **distributed key-value store** that stores all cluster data.  
+  - **Responsibilities:**  
+    - Persists configuration data, secrets, and cluster state.  
+    - Provides strong consistency guarantees.  
+    - Functions as the **database of Kubernetes**.  
+
+  ---
+  **3. kube-scheduler**
+  - **Purpose:** Determines **which node** a Pod should run on.  
+  - **Responsibilities:**  
+    - Considers resource availability (CPU, memory).  
+    - Evaluates affinity/anti-affinity rules.  
+    - Checks taints/tolerations.  
+    - Assigns Pods, but does not run them itself.  
+
+
+  ---
+  **4. kube-controller-manager**
+  - **Purpose:** Runs background **controllers** that manage cluster state.  
+  - **Key Controllers:**  
+    - **Node Controller:** Monitors node health.  
+    - **Replication Controller:** Ensures desired number of Pods are running.  
+    - **Endpoint Controller:** Updates Services and Pod endpoints.  
+    - **Service Account & Token Controllers:** Handle Pod authentication.  
+  ---
+  **5. cloud-controller-manager (Cloud Environments Only)**
+  - **Purpose:** Integrates Kubernetes with cloud providers (AWS, GCP, Azure, etc.).  
+  - **Responsibilities:**  
+    - Manages cloud-specific features:  
+      - Node lifecycle.  
+      - Route management.  
+      - Load balancer provisioning.  
+      - Persistent volume integration.  
 
 ---
-
-**2. etcd**
-- **Purpose:** A **distributed key-value store** that stores all cluster data.  
-- **Responsibilities:**  
-  - Persists configuration data, secrets, and cluster state.  
-  - Provides strong consistency guarantees.  
-  - Functions as the **database of Kubernetes**.  
-
----
-**3. kube-scheduler**
-- **Purpose:** Determines **which node** a Pod should run on.  
-- **Responsibilities:**  
-  - Considers resource availability (CPU, memory).  
-  - Evaluates affinity/anti-affinity rules.  
-  - Checks taints/tolerations.  
-  - Assigns Pods, but does not run them itself.  
-
-
----
-**4. kube-controller-manager**
-- **Purpose:** Runs background **controllers** that manage cluster state.  
-- **Key Controllers:**  
-  - **Node Controller:** Monitors node health.  
-  - **Replication Controller:** Ensures desired number of Pods are running.  
-  - **Endpoint Controller:** Updates Services and Pod endpoints.  
-  - **Service Account & Token Controllers:** Handle Pod authentication.  
----
-**5. cloud-controller-manager (Cloud Environments Only)**
-- **Purpose:** Integrates Kubernetes with cloud providers (AWS, GCP, Azure, etc.).  
-- **Responsibilities:**  
-  - Manages cloud-specific features:  
-    - Node lifecycle.  
-    - Route management.  
-    - Load balancer provisioning.  
-    - Persistent volume integration.  
 
 ### 26.  List  the Components of the **Worker node** and what is the purpose of each component.
 
@@ -777,3 +779,92 @@ spec:
   - Provides the container environment to run applications. 
 
 ---
+
+## Part2
+
+### 1. Namespace
+
+*In kubernetes, namespaces provide a mechanism for isolating groups of resources within a single cluster. Names of resources need to be unique within a namespaces, but not across namespaces. Namespace-based scoping applicable only for namespaced objects (e.g. Deployment, Service, etc) and not for cluster-wide objects (e.g. StorageClass, Nodes, PersistentVolumes, etc.).*
+
+- **Default namespaces:**  
+  - `default` → where resources are created if no namespace is specified.  
+  - `kube-system` → system components.  
+  - `kube-public` → public resources, accessible by all users.  
+- **Command examples:**  
+  ```bash
+  kubectl get namespaces
+  kubectl create namespace dev
+  kubectl get pods -n kube-system
+  ```
+### 2. Configmap
+
+*A ConfigMaps is an API object used to store non-confidential data in key-value pairs, Pods  can consume ConfigMaps as environment variables, command-line arguments, or as configuration files in volume.*
+
+*A ConfigMaps allows you to decouple environment-specific configuration from your container images, so that your application are easily portable.*
+
+- Use Cases: Environment variables, command-line arguments, config files.
+
+- **Command examples:**  
+  ```bash
+  kubectl create configmap app-config --from-literal=ENV=prod
+  kubectl get configmap app-config -o yaml
+  ```
+
+### 3. Secret
+
+*A Secret is an object that cotains a small amount of sensitive data such as password, a token, or a key. Such information might otherwise be put in a pod specification or in a container image. Using a Secret means that you do not need to include confidential data in your application code.*
+
+- Purpose: Keeps secrets encrypted in etcd and mounted securely.
+
+- **Command examples:**  
+  ```bash
+  kubectl create secret generic db-secret --from-literal=DB_PASS=12345
+  kubectl get secret db-secret -o yaml
+  ```
+
+### 4. Network Policy
+
+*If you want to cotrol traffic flow at the IP address or port level (OSI layer 3 or 4), NetworkPolicies allow you to specify rules for traffic flow within your cluster, and also between Pods and the outside world. your cluster must use a network plugin that supports NetworkPolicy enforcement.*
+
+- Key points:
+
+  - By default, Pods can talk to each other freely.
+
+  - Network Policies are deny-all by default once applied.
+
+- **Command examples:**  
+  ```bash
+  kubectl apply -f network-policy.yaml
+  ```
+
+### 5. Taint and toleration
+
+*Taints are the opposite, they allow a node to repel a set of pods.*
+
+*Tolerations are applied to pods, Tolerations allow the scheduler to schedule pods with matching taints. Tolerations allow scheduling but do not guarantee scheduling.*
+
+*Taints and tolerations work together to ensure that pods are not scheduled onto inappropriate nodes. One or more taints are applied to a node, this marks that the node should not accept any pods that do not tolerate the taints.*
+
+- **Command examples:**  
+  ```bash 
+  # Add a taint to a node
+  kubectl taint nodes node1 key=value:NoSchedule
+
+  # Remove the taint
+  kubectl taint nodes node1 key=value:NoSchedule-
+  ```
+
+### 6. Volume
+
+*Kubernetes volumes provide a way for containers in a pod to access and share data via the filesystem. There are different kinds of volume that you can use for different purposes, such as:*
+
+ - populating a configuration file based on a ConfigMap or a Secret
+ - providing some temporary scratch space for a pod
+ - sharing a filesystem between two different containers in the same pod
+ - sharing a filesystem between two different pods (even if those Pods run on different nodes)
+ - durably storing data so that it stays available even if the Pod restarts or is replaced
+ - passing configuration information to an app running in a container, based on details of the Pod the container is in (for example: telling a sidecar container what namespace the Pod is running in)
+ - providing read-only access to data in a different container image
+
+*Data sharing can be between different local processes within a container, or between different containers, or between Pods.*
+

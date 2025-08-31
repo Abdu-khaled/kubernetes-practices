@@ -130,6 +130,8 @@ Image: httpd:2.4-alpine
 20- Expose the Frontend (FE) Using Service to make it accessible from your browser.
 
 
+
+
 21-Create a Backend (BE) Deployment:
 * Create another Deployment for the backend using the following data:
 Image: python:3.8-slim
@@ -141,6 +143,8 @@ Command: ["python", "-m", "http.server", "8080"] (include this command in the de
 23- Create a LoadBalancer Service:
 * Create a LoadBalancer service for your frontend.
 * Explain what happens when you try to apply it in an environment that does not support load balancers (e.g., Minikube).
+
+
 
 24-Explain DaemonSet and Provide a YAML File:
 * Explain what a DaemonSet is and how it works.
