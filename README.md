@@ -1,5 +1,5 @@
 # kubernetes-practices
-
+Check out my repo here: [GitHub - Abdu-khaled/kubernetes-practices](https://github.com/Abdu-khaled/kubernetes-practices.git)
 ## Part1:
 
 ### 1. Create pod nginx with name my nginx direct from command don't use yaml file.
@@ -1200,7 +1200,7 @@ kubectl describe node multinode | grep -i taint
 
 * Apply a Toleration in the mongodb-deployment to allow the MongoDB pod to be scheduled on the tainted node 
 
-** Add Toleration in mongodb-deployment** 
+**Add Toleration in mongodb-deployment** 
 ```bash
 tolerations:
 - key: "db"
