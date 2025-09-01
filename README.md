@@ -1087,12 +1087,12 @@ spec:
 ![](./screenshot/31.png)
 
 ---
-  * C. Deploy Mongo Express in the mongo-express namespace.
-  * Use a Deployment named mongo-express-deployment with:
-     * 1 replica.
-     * The image: mongo-express:latest.
-     * Create a ConfigMap named mongo-express-config in the mongo-express namespace to store environment variables for the Mongo Express application.Hint (you should accces the MongoDB by mongo-express deployment)
-     *  Create a NodePort Service named mongo-express-service to expose the Mongo Express interface externally on port 8081.
+* C ) Deploy Mongo Express in the mongo-express namespace.
+* Use a Deployment named mongo-express-deployment with:
+  * 1 replica.
+  * The image: mongo-express:latest.
+  * Create a ConfigMap named mongo-express-config in the mongo-express namespace to store environment variables for the Mongo Express application.Hint (you should accces the MongoDB by mongo-express deployment)
+  *  Create a NodePort Service named mongo-express-service to expose the Mongo Express interface externally on port 8081.
 
 **ConfigMap**
 ```bash
@@ -1153,3 +1153,32 @@ spec:
 
 **Verification Command:**
 ![](./screenshot/32.png)
+
+---
+* D ) apply network policy in the namespace mongo-db to be accssiable from only mongo-express namespace.
+
+```bash
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-mongo-express
+  namespace: mongo-db
+spec:
+  podSelector:
+    matchLabels:
+      app: mongodb
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: mongo-express
+      ports:
+        - protocol: TCP
+          port: 27017
+  policyTypes:
+    - Ingress
+```
+**Verification Command:**
+![](./screenshot/33.png)
+
+
