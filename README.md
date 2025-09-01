@@ -1182,3 +1182,21 @@ spec:
 ![](./screenshot/33.png)
 
 
+---
+
+
+### 4. Use Taints and Tolerations:
+
+* Taint one of the Minikube nodes with key=db:NoSchedule.
+
+**Verification Command:**
+```bash
+kubectl taint node multinode key=db:NoSchedule
+kubectl describe node multinode | grep -i taint
+```
+**Verification Command:**
+![](./screenshot/34.png)
+
+
+* Apply a Toleration in the mongodb-deployment to allow the MongoDB pod to be scheduled on the tainted node 
+
