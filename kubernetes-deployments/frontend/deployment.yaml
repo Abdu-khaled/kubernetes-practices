@@ -22,7 +22,13 @@ spec:
         - containerPort: 80
         volumeMounts:
         - name: web-content
-          mountPath: /usr/share/nginx/html 
+          mountPath: /usr/share/nginx/html
+        - name: frontend-html
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
       volumes:
       - name: web-content
         emptyDir: {}
+      - name: frontend-html
+        configMap:
+          name: frontend-index

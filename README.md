@@ -991,3 +991,99 @@ spec:
      * Use a Persistent Volume and Persistent Volume Claim (PVC) named mongodb-pvc to store MongoDB data at /data/db.
      * Create a ClusterIP Service named mongodb-service to expose the MongoDB database internally within the cluster on port 27017.
 
+**Secret**
+```bash
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-secret
+  namespace: mongo-db
+type: Opaque
+data:
+  MONGO_INITDB_ROOT_USERNAME: YWRtaW4=
+  MONGO_INITDB_ROOT_PASSWORD: YWRtaW4xMjM=
+```
+
+**Deployment**
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  namespace: mongo-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+          envFrom:
+            - secretRef:
+                name: mongodb-secret
+          volumeMounts:
+            - name: mongodb-storage
+              mountPath: /data/db
+      volumes:
+        - name: mongodb-storage
+          persistentVolumeClaim:
+            claimName: mongodb-pvc
+```
+**PVC**
+```bash
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+  namespace: mongo-db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+```
+**PV**
+```Bash
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+  namespace: mongo-db
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/mongodb
+```
+**Service**
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  namespace: mongo-db
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - port: 27017
+      targetPort: 27017
+  type: ClusterIP
+```
+
+
+**Verification Command:**
+![](./screenshot/31.png)
+
+
