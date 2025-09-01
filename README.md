@@ -1086,4 +1086,70 @@ spec:
 **Verification Command:**
 ![](./screenshot/31.png)
 
+---
+  * C. Deploy Mongo Express in the mongo-express namespace.
+  * Use a Deployment named mongo-express-deployment with:
+     * 1 replica.
+     * The image: mongo-express:latest.
+     * Create a ConfigMap named mongo-express-config in the mongo-express namespace to store environment variables for the Mongo Express application.Hint (you should accces the MongoDB by mongo-express deployment)
+     *  Create a NodePort Service named mongo-express-service to expose the Mongo Express interface externally on port 8081.
 
+**ConfigMap**
+```bash
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-secret
+  namespace: mongo-db
+type: Opaque
+data:
+  MONGO_INITDB_ROOT_USERNAME: YWRtaW4=
+  MONGO_INITDB_ROOT_PASSWORD: YWRtaW4xMjM=
+```
+
+**Deployment**
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express-deployment
+  namespace: mongo-express
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-express
+  template:
+    metadata:
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+        - name: mongo-express
+          image: mongo-express:latest
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - configMapRef:
+                name: mongo-express-config
+```
+**Service**
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-express-service
+  namespace: mongo-express
+spec:
+  type: NodePort
+  selector:
+    app: mongo-express
+  ports:
+  - port: 8081
+    targetPort: 8081
+    nodePort: 30081
+```
+
+
+**Verification Command:**
+![](./screenshot/32.png)
