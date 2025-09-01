@@ -921,10 +921,9 @@ metadata:
 ```
 
 ### 3. Deployments&services
-
-*  Simple web frontend application in the FE-namespace namespace with 2 riplca   
-*   Use an emptyDir Volume to store the web content and mount it to /usr/share/nginx/html in the POD
-*   Create a NodePort Service named frontend-service to expose the Nginx application externally on port 80.
+*  A. Simple web frontend application in the FE-namespace namespace with 2 riplca   
+   *   Use an emptyDir Volume to store the web content and mount it to /usr/share/nginx/html in the POD
+   *   Create a NodePort Service named frontend-service to expose the Nginx application externally on port 80.
 
 **Deployment**
 ```bash
@@ -980,3 +979,15 @@ spec:
 ![](./screenshot/29.png)
 
 ![](./screenshot/30.png)
+
+---
+* b. Deploy a MongoDB database in the mongo-db namespace.
+  * Use a Deployment named mongodb-deployment with:
+     * 1 replica.
+     * The image: mongo:latest
+     * Create a Secret named mongodb-secret in the mongo-db namespace to store the MongoDB root username (MONGO_INITDB_ROOT_USERNAME) and password (MONGO_INITDB_ROOT_PASSWORD).
+     * Root username: admin
+     * Root password: ********
+     * Use a Persistent Volume and Persistent Volume Claim (PVC) named mongodb-pvc to store MongoDB data at /data/db.
+     * Create a ClusterIP Service named mongodb-service to expose the MongoDB database internally within the cluster on port 27017.
+
