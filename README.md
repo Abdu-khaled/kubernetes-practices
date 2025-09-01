@@ -879,5 +879,44 @@ Types of volumes:
 ---
 ## Part3:
 
-### 1. Start your minikube with 2 nodes 
+### 1. Start minikube with 2 nodes 
 
+```bash
+minikube start --nodes=2 -p multinode
+kubectl get nodes
+```
+**Verification Command:**
+![](./screenshot/27.png)
+
+
+
+### 2. create 3 namespaces (FE, mongo-db, mongo-express).
+
+```bash
+kubectl create namespace fe
+kubectl create namespace mongo-db
+kubectl create namespace mongo-express
+kubectl get namespace
+```
+**Verification Command:**
+![](./screenshot/28.png)
+
+**Or Apply it in yaml file**
+
+```bash
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fe
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mongo-db
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mongo-express
+
+```
