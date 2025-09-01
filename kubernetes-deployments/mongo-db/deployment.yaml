@@ -13,6 +13,11 @@ spec:
       labels:
         app: mongodb
     spec:
+      tolerations:
+      - key: "db"
+        operator: "Equal"
+        value: "mongo"
+        effect: "NoSchedule"
       containers:
         - name: mongodb
           image: mongo:latest

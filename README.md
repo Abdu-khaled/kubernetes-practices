@@ -1200,3 +1200,14 @@ kubectl describe node multinode | grep -i taint
 
 * Apply a Toleration in the mongodb-deployment to allow the MongoDB pod to be scheduled on the tainted node 
 
+** Add Toleration in mongodb-deployment** 
+```bash
+tolerations:
+- key: "db"
+  operator: "Equal"
+  value: "mongo"
+  effect: "NoSchedule"
+```
+
+**Verification Command:**
+![](./screenshot/35.png)
