@@ -18,6 +18,8 @@ spec:
         operator: "Equal"
         value: "mongo"
         effect: "NoSchedule"
+      nodeSelector:
+        kubernetes.io/hostname: multinode
       containers:
         - name: mongodb
           image: mongo:latest
