@@ -920,4 +920,63 @@ metadata:
   name: mongo-express
 ```
 
-### 3. 
+### 3. Deployments&services
+
+*  Simple web frontend application in the FE-namespace namespace with 2 riplca   
+*   Use an emptyDir Volume to store the web content and mount it to /usr/share/nginx/html in the POD
+*   Create a NodePort Service named frontend-service to expose the Nginx application externally on port 80.
+
+**Deployment**
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: fe
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: web-content
+          mountPath: /usr/share/nginx/html 
+      volumes:
+      - name: web-content
+        emptyDir: {}
+```
+
+**Service**
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-webapp-service
+  namespace: fe
+spec:
+  type: NodePort
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      NodePort: 30080
+```
+
+**Verification Command:**
+![](./screenshot/29.png)
+
+![](./screenshot/30.png)
